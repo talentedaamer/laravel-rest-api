@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\v1;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+// resources
+use App\Http\Resources\Post\PostResource;
+use App\Http\Resources\Post\PostCollection;
 
 class PostController extends Controller
 {
@@ -48,7 +51,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return new PostResource($post);
     }
 
     /**
