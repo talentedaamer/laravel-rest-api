@@ -14,6 +14,19 @@ class PostCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $posts = [];
+        foreach ( $this->resource as $post ) {
+            $posts[] = [
+                'id' => $post->id,
+                'title' => $post->title,
+                'slug' => $post->slug,
+                'content' => $post->content,
+                'href' => [
+                    'link' => route( 'posts.show', $post->id )
+                ]
+            ];
+        }
+        
+        return $posts;
     }
 }

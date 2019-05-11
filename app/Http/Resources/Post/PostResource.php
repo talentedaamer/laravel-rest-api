@@ -21,8 +21,13 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'vote_up' => $this->comments->count() ? $this->comments->sum('vote') : 'No Votes Yet',
+            'vote_down' => $this->comments->count() ? $this->comments->count() - $this->comments->sum('vote') : 'No Votes Yet',
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'href' => [
+                'comments' => route('comments.index', $this->id )
+            ]
         ];
     }
 }
