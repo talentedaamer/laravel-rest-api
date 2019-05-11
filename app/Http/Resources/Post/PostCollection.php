@@ -21,8 +21,8 @@ class PostCollection extends ResourceCollection
                 'title' => $post->title,
                 'slug' => $post->slug,
                 'content' => $post->content,
-                'href' => [
-                    'link' => route( 'posts.show', $post->id )
+                'links' => [
+                    'post' => route( 'posts.show', $post->id )
                 ]
             ];
         }

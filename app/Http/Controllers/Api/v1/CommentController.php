@@ -2,30 +2,24 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Comment\CommentResource;
+use App\Http\Resources\Comment\CommentCollection;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the comments for post.
+     * @param Post $post
      *
-     * @return \Illuminate\Http\Response
+     * @return CommentCollection
      */
-    public function index()
+    public function index(Post $post)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new CommentCollection($post->comments);
     }
 
     /**
@@ -38,17 +32,17 @@ class CommentController extends Controller
     {
         //
     }
-
+    
     /**
-     * Display the specified resource.
+     * display specific post comment
+     * @param Post $post
+     * @param Comment $comment
      *
-     * @param  \App\Models\Comment  $comment
-     *
-     * @return \Illuminate\Http\Response
+     * @return CommentResource
      */
-    public function show(Comment $comment)
+    public function show(Post $post, Comment $comment)
     {
-        //
+        return new CommentResource($post->comments()->find($comment->id));
     }
 
     /**

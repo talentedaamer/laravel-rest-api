@@ -25,7 +25,7 @@ class PostResource extends JsonResource
             'vote_down' => $this->comments->count() ? $this->comments->count() - $this->comments->sum('vote') : 'No Votes Yet',
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'href' => [
+            'links' => [
                 'comments' => route('comments.index', $this->id )
             ]
         ];
