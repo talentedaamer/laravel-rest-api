@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,18 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:posts|max:255',
-            'content' => 'required'
+            'author' => 'required',
+            'comment' => 'required|max:500',
+            'vote' => 'required'
         ];
     }
     
-    /**
-     * get the validation messages that apply to the request attributes
-     * @return array
-     */
     public function messages()
     {
         return [
-            'title.unique' => 'Post title already exists',
-            'title.required' => 'Post title is required',
-            'content.required'  => 'Post content is required',
+            'author.required' => 'Comment Author is required',
+            'comment.required' => 'Comment Content is required',
+            'vote.required'  => 'Comment Vote is required',
         ];
     }
 }

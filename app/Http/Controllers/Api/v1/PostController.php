@@ -76,7 +76,7 @@ class PostController extends Controller
     {
         $this->isUserPost($post);
         $post->update($request->all());
-        return response()->json([
+        return response([
             'data' => new PostResource($post)
         ], Response::HTTP_CREATED);
     }
@@ -92,7 +92,9 @@ class PostController extends Controller
     {
         $this->isUserPost($post);
         $post->delete();
-        return response()->json(null, Response::HTTP_NO_CONTENT );
+        return response([
+            null
+        ], Response::HTTP_NO_CONTENT);
     }
     
     /**

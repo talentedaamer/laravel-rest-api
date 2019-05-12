@@ -21,7 +21,7 @@ class CommentResource extends JsonResource
             'vote' => $this->vote,
             'links' => [
                 'post' => route( 'posts.show', $this->post_id ),
-                'comment' => route( 'comments.show', [ $this->post_id, $this->id ] )
+                // 'comment' => route( 'comments.show', [ $this->post_id, $this->id ] )
             ]
         ];
     }

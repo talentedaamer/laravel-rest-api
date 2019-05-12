@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\v1;
 use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Http\Requests\CommentRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Comment\CommentResource;
 use App\Http\Resources\Comment\CommentCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 class CommentController extends Controller
 {
@@ -21,16 +23,21 @@ class CommentController extends Controller
     {
         return new CommentCollection($post->comments);
     }
-
+    
     /**
      * Store a newly created resource in storage.
+     * @param CommentRequest $request
+     * @param Post $post
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request, Post $post)
     {
-        //
+        $comment = new Comment( $request->all() );
+        $post->comments()->save( $comment );
+        return response([
+            'data' => new CommentResource($comment)
+        ], Response::HTTP_CREATED);
     }
     
     /**
@@ -53,9 +60,12 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Post $post, Comment $comment)
     {
-        //
+        $comment->update( $request->all() );
+        return response([
+            'data' => new CommentResource($comment)
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -65,8 +75,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
-        //
+        $comment->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
