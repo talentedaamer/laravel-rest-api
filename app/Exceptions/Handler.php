@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -25,12 +28,13 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
+    
     /**
      * Report or log an exception.
+     * @param Exception $exception
      *
-     * @param  \Exception  $exception
-     * @return void
+     * @return mixed|void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -46,6 +50,40 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ( $this->isModelExp( $exception ) ) {
+            return response()->json([
+                'error' => 'Invalid Parameter Value in the Request.'
+            ], Response::HTTP_NOT_FOUND );
+        }
+    
+        if ( $this->isHttpExp( $exception ) ) {
+            return response()->json([
+                'error' => 'Invalid Route or Parameter in the Request.'
+            ], Response::HTTP_BAD_REQUEST );
+        }
+        
         return parent::render($request, $exception);
+    }
+    
+    /**
+     * if its a model not found exception
+     * @param $exception
+     *
+     * @return bool
+     */
+    public function isModelExp( $exception )
+    {
+        return $exception instanceof ModelNotFoundException;
+    }
+    
+    /**
+     * if its an http not found exception
+     * @param $exception
+     *
+     * @return bool
+     */
+    public function isHttpExp( $exception )
+    {
+        return $exception instanceof NotFoundHttpException;
     }
 }
